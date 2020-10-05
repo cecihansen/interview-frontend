@@ -3,31 +3,94 @@ import React from 'react';
 /* THE FIX STARTS HERE */
 
 // state data for 3 counters
-const data = [
-  { id: 1, value: 0 },
-  { id: 2, value: 0 },
-  { id: 3, value: 0 },
-];
 
-// Counter Component
-const Counter = ({ value }) => {
+// Counter Component Original
+/* const Counter = ({ value, onIncrement, onDecrement }) => {
   return (
     <div className="d-flex my-2">
+
       <strong>{value}</strong>
       <div className="ml-2">
-        <button className="btn btn-danger mr-1">-</button>
-        <button className="btn btn-success">+</button>
+        <button className="btn btn-danger mr-1" onClick={onDecrement}>-</button>
+        <button className="btn btn-success" onClick={onIncrement} > +</button>
+      </div>
+    </div>
+  );
+}; */
+
+// Counter Component Copy (punto 5)
+const Counter = ({ value }) => {
+  const [count, setCount] = React.useState(0);
+
+  return (
+    <div className="d-flex my-2">
+
+      <strong>{count}</strong>
+      <div className="ml-2">
+        <button className="btn btn-danger mr-1" onClick={() => setCount(count - 1)}>-</button>
+        <button className="btn btn-success" onClick={() => setCount(count + 1)} > +</button>
       </div>
     </div>
   );
 };
 
+const Total = ({ value }) => {
+  return (
+    <div>
+      <p>
+        Total: <strong>{value}</strong>
+      </p>
+    </div>
+  );
+};
+
 const GroupOfCounters = () => {
+  let total = 0;
+  const [data, setData] = React.useState([
+    { id: 1, value: 0 },
+    { id: 2, value: 0 },
+    { id: 3, value: 0 },
+    { id: 4, value: 0 }]);
+
+  function onIncrement(id) {
+    console.log(id)
+
+    for (var i = 0; i < data.length; i++) {
+      if (id === data[i].id) {
+        console.log(data[i])
+        let newData = [...data]
+        newData[i].value = newData[i].value + 1
+        console.log(newData)
+        return setData(newData)
+      }
+    }
+  }
+
+  function onDecrement(id) {
+    console.log(id)
+
+    for (var i = 0; i < data.length; i++) {
+      if (id === data[i].id) {
+        console.log(data[i])
+        let newData = [...data]
+        newData[i].value = newData[i].value - 1
+        console.log(newData)
+        setData(newData)
+      }
+    }
+  }
+
+  data.map((count) => {
+    return (total += count.value);
+  });
+
   return (
     <div>
       {data.map((counter) => (
-        <Counter key={counter.id} value={counter.value} />
+        <Counter key={counter.id} value={counter.value} onIncrement={() => onIncrement(counter.id)}
+          onDecrement={() => onDecrement(counter.id)} />
       ))}
+      <Total value={total} />
     </div>
   );
 };
